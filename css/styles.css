@@ -1,0 +1,736 @@
+/* ==========================================================================
+   EcoMetrópolis Santa Cruz - Hoja de Estilos Principal
+   Diseño sobrio, paleta ecológica y componentes interactivos
+   ========================================================================== */
+
+:root {
+  --bg-primary: #0d1512;
+  --bg-secondary: #14201b;
+  --bg-card: #1b2b24;
+  --bg-card-hover: #22372e;
+  --border-color: #2b4539;
+  --border-light: #3a5c4c;
+  
+  --text-main: #e8f1ec;
+  --text-muted: #9ab4a6;
+  --text-bright: #ffffff;
+
+  --accent-green: #2ecc71;
+  --accent-emerald: #10b981;
+  --accent-blue: #3b82f6;
+  --accent-amber: #f59e0b;
+  --accent-orange: #f97316;
+  --accent-red: #ef4444;
+  --accent-purple: #a855f7;
+
+  --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- ENCABEZADO INSTITUCIONAL --- */
+.app-header {
+  background-color: var(--bg-secondary);
+  border-bottom: 2px solid var(--border-color);
+  padding: 1rem 2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.brand-badge {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-emerald);
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.app-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-bright);
+}
+
+.app-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.timeline-control {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  background-color: var(--bg-card);
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.year-display {
+  display: flex;
+  flex-direction: column;
+}
+
+.year-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.year-value {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--accent-green);
+  font-family: var(--font-mono);
+}
+
+.budget-display {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--border-color);
+  padding-left: 1.25rem;
+}
+
+.budget-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.budget-value {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--accent-amber);
+  font-family: var(--font-mono);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+  padding: 0.6rem 1rem;
+  font-size: 0.85rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  color: var(--text-bright);
+  border-color: var(--text-muted);
+}
+
+/* --- CONTENEDOR PRINCIPAL --- */
+.main-layout {
+  max-width: 1400px;
+  margin: 1.5rem auto;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 1.5rem;
+  flex: 1;
+  width: 100%;
+}
+
+@media (max-width: 1100px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- TABLERO DE INDICADORES (METRIC GAUGES) --- */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.metric-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.metric-card:hover {
+  border-color: var(--border-light);
+  transform: translateY(-2px);
+}
+
+.metric-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.metric-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.metric-icon {
+  font-size: 1.2rem;
+}
+
+.metric-value-box {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  margin: 0.25rem 0;
+}
+
+.metric-number {
+  font-size: 1.8rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: var(--text-bright);
+}
+
+.metric-unit {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.metric-bar-bg {
+  width: 100%;
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.metric-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s ease, background-color 0.4s ease;
+}
+
+.metric-status-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+  margin-top: 0.4rem;
+  text-align: center;
+}
+
+/* Colores de Alerta ICA y Estados */
+.ica-verde { background-color: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid #2ecc71; }
+.ica-amarillo { background-color: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid #f59e0b; }
+.ica-naranja { background-color: rgba(249, 115, 22, 0.2); color: #f97316; border: 1px solid #f97316; }
+.ica-rojo { background-color: rgba(239, 68, 68, 0.25); color: #ef4444; border: 1px solid #ef4444; }
+.ica-purpura { background-color: rgba(168, 85, 247, 0.3); color: #d8b4fe; border: 1px solid #a855f7; }
+
+/* --- MAPA TERRITORIAL SVG --- */
+.territory-view {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.territory-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.section-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.svg-map-container {
+  width: 100%;
+  height: 240px;
+  background-color: #0b1310;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.map-smoke-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(180, 83, 9, 0.3) 0%, rgba(80, 40, 10, 0.6) 80%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.map-tooltip {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(13, 21, 18, 0.9);
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(4px);
+}
+
+/* --- BANDEJA DE MEDIDAS DE POLÍTICA --- */
+.policies-section {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.filter-bar {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+
+.filter-chip {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-chip.active, .filter-chip:hover {
+  background-color: var(--accent-emerald);
+  color: #000000;
+  font-weight: 700;
+  border-color: var(--accent-emerald);
+}
+
+.policies-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+}
+
+.policy-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.policy-card:hover {
+  border-color: var(--border-light);
+  background-color: var(--bg-card-hover);
+}
+
+.policy-card.selected {
+  border-color: var(--accent-green);
+  background-color: rgba(46, 204, 113, 0.08);
+  box-shadow: inset 0 0 0 1px var(--accent-green);
+}
+
+.policy-info {
+  flex: 1;
+}
+
+.policy-tag {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--accent-emerald);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.2rem;
+}
+
+.policy-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin-bottom: 0.25rem;
+}
+
+.policy-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+  margin-bottom: 0.5rem;
+}
+
+.policy-deltas {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.delta-pill {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  padding: 0.1rem 0.35rem;
+  border-radius: var(--radius-sm);
+}
+
+.delta-pos { background: rgba(46, 204, 113, 0.15); color: #2ecc71; }
+.delta-neg { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+.delta-neutral { background: rgba(255, 255, 255, 0.1); color: var(--text-muted); }
+
+.policy-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.cost-tag {
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  color: var(--accent-amber);
+}
+
+.cost-revenue {
+  color: var(--accent-green);
+}
+
+.btn-toggle-policy {
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.policy-card.selected .btn-toggle-policy {
+  background-color: var(--accent-green);
+  color: #000;
+  border-color: var(--accent-green);
+}
+
+.btn-theory-link {
+  font-size: 0.7rem;
+  color: var(--accent-blue);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+/* --- BARRA LATERAL (EVENTOS Y BITÁCORA) --- */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.event-box {
+  background: linear-gradient(180deg, #2a1b18 0%, #1c1413 100%);
+  border: 1px solid #7c2d12;
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.event-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: #fb923c;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.event-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.event-desc {
+  font-size: 0.82rem;
+  color: #fed7aa;
+  line-height: 1.4;
+}
+
+.alerts-panel {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+}
+
+.alert-item {
+  background: rgba(239, 68, 68, 0.1);
+  border-left: 3px solid var(--accent-red);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.78rem;
+  color: #fca5a5;
+  margin-top: 0.5rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.log-panel {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  flex: 1;
+}
+
+.log-list {
+  list-style: none;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  max-height: 250px;
+  overflow-y: auto;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.log-entry {
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* --- VENTANAS MODALES --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1.5rem;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-content {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 600px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  animation: modalEnter 0.25s ease-out;
+}
+
+.modal-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.btn-close-modal {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 1.5rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-main);
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.theory-author {
+  font-weight: 800;
+  color: var(--accent-emerald);
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.theory-quote {
+  background-color: var(--bg-card);
+  border-left: 4px solid var(--accent-emerald);
+  padding: 1rem;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-style: italic;
+  color: var(--text-bright);
+}
+
+/* Modal de Dictamen Final */
+.final-report {
+  max-width: 750px;
+}
+
+.score-badge {
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border-color);
+}
+
+.score-number {
+  font-size: 3rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: var(--accent-green);
+}
+
+.score-grade {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  margin-top: 0.25rem;
+}
+
+.score-paradigm {
+  font-size: 0.85rem;
+  color: var(--accent-emerald);
+  font-weight: 600;
+}
+
+.metrics-summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  font-size: 0.85rem;
+}
+
+.metrics-summary-table th, .metrics-summary-table td {
+  padding: 0.6rem;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+}
+
+.metrics-summary-table th {
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-size: 0.7rem;
+}
+
+@keyframes modalEnter {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Pie de página */
+.app-footer {
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  padding: 0.8rem 2rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: center;
+}

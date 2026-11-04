@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoMetrópolis Santa Cruz: Dinámicas Biofísicas y Límites Territoriales</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ENCABEZADO INSTITUCIONAL -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div>
+        <div class="brand-badge">UAGRM · Facultad de Humanidades · Taller de Educación Ambiental</div>
+        <h1 class="app-title">EcoMetrópolis Santa Cruz</h1>
+        <p class="app-subtitle">Laboratorio de Simulación Territorial, Metabolismo Biofísico y Fronteras Ecológicas (2026–2035)</p>
+      </div>
+
+      <div class="timeline-control">
+        <div class="year-display">
+          <span class="year-label">Año de Gestión</span>
+          <span class="year-value" id="anio-actual">2026</span>
+        </div>
+        <div class="budget-display">
+          <span class="budget-label">Presupuesto Disponible</span>
+          <span class="budget-value"><span id="presupuesto-disponible">100</span> pts</span>
+        </div>
+        <button id="btn-avanzar-anio" class="btn-primary">
+          <span>Avanzar al Año 2027</span> ➔
+        </button>
+        <button id="btn-reiniciar" class="btn-secondary" title="Reiniciar simulación a 2026">
+          ↺ Reiniciar
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <main class="main-layout">
+    
+    <!-- COLUMNA PRINCIPAL DE TRABAJO -->
+    <div class="content-column">
+
+      <!-- TABLERO DE INDICADORES BIOFÍSICOS -->
+      <section class="dashboard-grid">
+        <!-- 1. Calidad del Aire PM2.5 -->
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-title">Calidad del Aire</span>
+            <span class="metric-icon">💨</span>
+          </div>
+          <div class="metric-value-box">
+            <span class="metric-number" id="val-pm25">35</span>
+            <span class="metric-unit">µg/m³ PM2.5</span>
+          </div>
+          <div class="metric-bar-bg">
+            <div class="metric-bar-fill" id="barra-pm25" style="width: 25%;"></div>
+          </div>
+          <div>
+            <span class="metric-status-tag ica-amarillo" id="tag-pm25">Moderada</span>
+          </div>
+        </div>
+
+        <!-- 2. Recarga Acuíferos Urubó / Piraí -->
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-title">Acuífero Urubó/Piraí</span>
+            <span class="metric-icon">💧</span>
+          </div>
+          <div class="metric-value-box">
+            <span class="metric-number" id="val-acuifero">80</span>
+            <span class="metric-unit">% recarga</span>
+          </div>
+          <div class="metric-bar-bg">
+            <div class="metric-bar-fill" id="barra-acuifero" style="width: 80%;"></div>
+          </div>
+          <div>
+            <span class="metric-status-tag ica-verde" id="tag-acuifero">Nivel Óptimo</span>
+          </div>
+        </div>
+
+        <!-- 3. Cobertura Boscosa Chiquitana -->
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-title">Bosque Chiquitano</span>
+            <span class="metric-icon">🌳</span>
+          </div>
+          <div class="metric-value-box">
+            <span class="metric-number" id="val-bosque">82</span>
+            <span class="metric-unit">% remanente</span>
+          </div>
+          <div class="metric-bar-bg">
+            <div class="metric-bar-fill" id="barra-bosque" style="width: 82%;"></div>
+          </div>
+          <div>
+            <span class="metric-status-tag ica-verde" id="tag-bosque">Biomasa Estable</span>
+          </div>
+        </div>
+
+        <!-- 4. Economía Circular 9R -->
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-title">Economía Circular</span>
+            <span class="metric-icon">♻️</span>
+          </div>
+          <div class="metric-value-box">
+            <span class="metric-number" id="val-circular">12</span>
+            <span class="metric-unit">% tasa 9R</span>
+          </div>
+          <div class="metric-bar-bg">
+            <div class="metric-bar-fill" id="barra-circular" style="width: 12%;"></div>
+          </div>
+          <div>
+            <span class="metric-status-tag ica-verde" id="tag-circular">12% Tasa 9R</span>
+          </div>
+        </div>
+
+        <!-- 5. Ocupación Sanitaria Respiratoria -->
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-title">Presión Sanitaria</span>
+            <span class="metric-icon">🏥</span>
+          </div>
+          <div class="metric-value-box">
+            <span class="metric-number" id="val-salud">28</span>
+            <span class="metric-unit">% ocupación</span>
+          </div>
+          <div class="metric-bar-bg">
+            <div class="metric-bar-fill" id="barra-salud" style="width: 28%;"></div>
+          </div>
+          <div>
+            <span class="metric-status-tag ica-verde" id="tag-salud">Capacidad Estable</span>
+          </div>
+        </div>
+
+        <!-- 6. Descontento Social -->
+        <div class="metric-card">
+          <div class="metric-header">
+            <span class="metric-title">Tensión Social</span>
+            <span class="metric-icon">⚡</span>
+          </div>
+          <div class="metric-value-box">
+            <span class="metric-number" id="val-tension">24</span>
+            <span class="metric-unit">% descontento</span>
+          </div>
+          <div class="metric-bar-bg">
+            <div class="metric-bar-fill" id="barra-tension" style="width: 24%;"></div>
+          </div>
+          <div>
+            <span class="metric-status-tag ica-verde" id="tag-tension">Paz Ciudadana</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- VISOR TERRITORIAL INTERACTIVO (SVG DE SANTA CRUZ) -->
+      <section class="territory-view">
+        <div class="territory-header">
+          <h2 class="section-title">🗺️ Mapa Metabólico de la Cuenca y Área Metropolitana</h2>
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Visualización biofísica interactiva en tiempo real</span>
+        </div>
+
+        <div class="svg-map-container">
+          <svg width="100%" height="100%" viewBox="0 0 800 240" preserveAspectRatio="xMidYMid meet">
+            <!-- Fondo geográfico base -->
+            <rect width="800" height="240" fill="#0d1813" />
+
+            <!-- Zona de recarga freática del Urubó (Oeste) -->
+            <path id="svg-zona-urubo" class="interactive-map-zone"
+                  d="M 100 20 Q 180 50 200 130 Q 190 200 120 230 L 20 230 L 20 20 Z"
+                  fill="#166534" opacity="0.6" stroke="#22c55e" stroke-dasharray="4,4"
+                  data-info="Colinas del Urubó: Zona estratégica de infiltración y recarga del acuífero que abastece de agua potable a Santa Cruz." />
+            <text x="70" y="120" fill="#86efac" font-size="11" font-weight="700">Urubó / Recarga Freática</text>
+
+            <!-- Río Piraí y Cordón Ecológico Ribereño -->
+            <path id="svg-rio-pirai" class="interactive-map-zone"
+                  d="M 230 10 Q 245 70 235 120 T 250 240"
+                  fill="none" stroke="#3b82f6" stroke-width="4.5"
+                  data-info="Río Piraí y Cordón Ecológico: Freno natural a crecidas y corredor biológico de amortiguamiento." />
+            <text x="260" y="35" fill="#93c5fd" font-size="10">Río Piraí</text>
+
+            <!-- Mancha Urbana Metropolitana de Santa Cruz (Anillos concéntricos) -->
+            <g class="interactive-map-zone" data-info="Área Metropolitana de Santa Cruz: Alta densidad demográfica, consumo metabólico de recursos y fuentes fijas/móviles de PM2.5.">
+              <!-- Anillos concéntricos -->
+              <circle cx="430" cy="130" r="85" fill="#1e293b" opacity="0.4" stroke="#475569" stroke-width="1.5" />
+              <circle cx="430" cy="130" r="60" fill="#1e293b" opacity="0.5" stroke="#64748b" stroke-width="1.5" />
+              <circle cx="430" cy="130" r="38" fill="#334155" opacity="0.6" stroke="#94a3b8" stroke-width="1.5" />
+              <circle cx="430" cy="130" r="16" fill="#475569" opacity="0.8" stroke="#cbd5e1" stroke-width="2" />
+              <!-- Radiales representativas -->
+              <line x1="430" y1="45" x2="430" y2="215" stroke="#64748b" stroke-width="1" />
+              <line x1="345" y1="130" x2="515" y2="130" stroke="#64748b" stroke-width="1" />
+              <line x1="370" y1="70" x2="490" y2="190" stroke="#64748b" stroke-width="1" />
+              <line x1="370" y1="190" x2="490" y2="70" stroke="#64748b" stroke-width="1" />
+              <text x="430" y="133" fill="#ffffff" font-size="9" font-weight="700" text-anchor="middle">Mancha Urbana</text>
+            </g>
+
+            <!-- Área del Norte Integrado (Agroindustria) -->
+            <rect class="interactive-map-zone" x="330" y="15" width="180" height="30" rx="4"
+                  fill="#854d0e" opacity="0.5" stroke="#ca8a04"
+                  data-info="Norte Integrado: Polo agropecuario soyero y cañero con alta tasa de chaqueos estacionales y uso intensivo de agroquímicos." />
+            <text x="420" y="34" fill="#fef08a" font-size="10" text-anchor="middle">Norte Integrado (Agroindustria)</text>
+
+            <!-- Bosque Seco Chiquitano (Este / Noreste) -->
+            <path id="svg-area-bosque" class="interactive-map-zone"
+                  d="M 580 20 Q 640 10 770 30 L 780 220 Q 650 230 570 200 Q 560 110 580 20 Z"
+                  fill="#14532d" opacity="0.75" stroke="#16a34a"
+                  data-info="Bosque Seco Chiquitano: Sumidero de carbono y regulador hídrico regional sometido a desmontes y fuegos estacionales." />
+            <text x="670" y="125" fill="#86efac" font-size="11" font-weight="700" text-anchor="middle">Bosque Seco Chiquitano</text>
+
+            <!-- Complejo de Residuos (Sur Metropolitano) -->
+            <rect class="interactive-map-zone" x="380" y="210" width="100" height="22" rx="3"
+                  fill="#3f3f46" stroke="#71717a"
+                  data-info="Complejo de Disposición de Residuos (San Miguel de los Junos): Punto crítico de generación de lixiviados y emisiones de biogás metano." />
+            <text x="430" y="224" fill="#d4d4d8" font-size="9" text-anchor="middle">Vertedero San Miguel</text>
+          </svg>
+
+          <!-- Capa dinámica de humo por PM2.5 -->
+          <div id="map-smoke" class="map-smoke-overlay"></div>
+
+          <!-- Tooltip flotante con información biofísica -->
+          <div id="map-tooltip" class="map-tooltip">
+            Pasa el cursor sobre las zonas territoriales para explorar su función biofísica.
+          </div>
+        </div>
+      </section>
+
+      <!-- CARTERA DE MEDIDAS DE POLÍTICA PÚBLICA -->
+      <section class="policies-section">
+        <h2 class="section-title">🏛️ Asignación de Políticas Públicas e Inversión Territorial</h2>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
+          Selecciona las intervenciones que implementarás para el año en curso. Cada medida modifica el balance biofísico y presupuestario.
+        </p>
+
+        <!-- Barra de filtros por eje -->
+        <div class="filter-bar">
+          <button class="filter-chip active" data-eje="todos">Todas las Carteras</button>
+          <button class="filter-chip" data-eje="agroforestal">Regulación Agropecuaria</button>
+          <button class="filter-chip" data-eje="hidrologica">Protección Hidrológica</button>
+          <button class="filter-chip" data-eje="movilidad_aire">Movilidad y Aire</button>
+          <button class="filter-chip" data-eje="residuos_circular">Economía Circular</button>
+          <button class="filter-chip" data-eje="educacion_comunitaria">Educación Ambiental</button>
+        </div>
+
+        <!-- Contenedor dinámico de tarjetas de política -->
+        <div id="contenedor-politicas" class="policies-grid">
+          <!-- Renderizado dinámico desde ui.js -->
+        </div>
+      </section>
+
+    </div>
+
+    <!-- COLUMNA LATERAL: EVENTOS, ALERTAS Y REGISTRO -->
+    <aside class="sidebar">
+
+      <!-- Caja de Noticia / Evento Coyuntural del Año -->
+      <div class="event-box">
+        <div class="event-label">
+          <span>📰 Coyuntura Territorial del Período</span>
+        </div>
+        <h3 id="evento-titulo" class="event-title">Año 2026: Surazo seco y quemas descontroladas</h3>
+        <p id="evento-desc" class="event-desc">
+          Un frente frío sin precipitación arrastra nubes densas de humo desde las quemas del norte hacia el área metropolitana, elevando el material particulado en el aire.
+        </p>
+      </div>
+
+      <!-- Panel de Alertas Críticas (Tipping Points) -->
+      <div class="alerts-panel">
+        <h3 class="section-title" style="font-size: 0.95rem;">⚠️ Alertas Biofísicas y Sociales</h3>
+        <div id="contenedor-alertas">
+          <div class="alert-item">
+            Gestión territorial iniciada. Selecciona las medidas de política pública y avanza el año.
+          </div>
+        </div>
+      </div>
+
+      <!-- Bitácora Histórica de la Década -->
+      <div class="log-panel">
+        <h3 class="section-title" style="font-size: 0.95rem;">📜 Bitácora de Gestión</h3>
+        <ul id="lista-log" class="log-list">
+          <li class="log-entry">Inicio del período decenal de planificación biofísica (2026-2035).</li>
+        </ul>
+      </div>
+
+    </aside>
+
+  </main>
+
+  <!-- MODAL: FUNDAMENTO EPISTEMOLÓGICO -->
+  <div id="modal-teoria" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">📖 Fundamento de Economía Ecológica</h3>
+        <button class="btn-close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="modal-teoria-autor" class="theory-author">Autor y Obra</div>
+        <p id="modal-teoria-cita" class="theory-quote">Contenido del postulado...</p>
+        <p style="margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted);">
+          Este postulado sustenta por qué esta medida corrige o agudiza la fractura metabólica entre el subsistema económico humano y la biosfera finita.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: DICTAMEN FINAL ANTE EL TRIBUNAL EVALUADOR UAGRM -->
+  <div id="modal-final" class="modal-overlay">
+    <div class="modal-content final-report">
+      <div class="modal-header">
+        <h3 class="modal-title">🎓 Dictamen de Sostenibilidad Decenal (2026–2035)</h3>
+        <button class="btn-close-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="score-badge">
+          <div class="score-number" id="final-score-num">85 / 100</div>
+          <div class="score-grade" id="final-score-grade">Sostenibilidad Fuerte</div>
+          <div class="score-paradigm" id="final-score-paradigm">Paradigma Biofísico Dasgupta / Georgescu-Roegen</div>
+        </div>
+
+        <p id="final-score-diag" style="font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.25rem;">
+          Diagnóstico del resultado de la década...
+        </p>
+
+        <h4 style="font-size: 0.9rem; text-transform: uppercase; color: var(--accent-emerald); margin-bottom: 0.5rem;">
+          Balance Biofísico y Socioeconómico de Cierre:
+        </h4>
+        <table class="metrics-summary-table">
+          <thead>
+            <tr>
+              <th>Dimensión Territorial</th>
+              <th>Estado Final (2035)</th>
+            </tr>
+          </thead>
+          <tbody id="final-metrics-body">
+            <!-- Rellenado dinámico desde ui.js -->
+          </tbody>
+        </table>
+
+        <div style="display: flex; justify-content: space-between; margin-top: 1.5rem; gap: 1rem;">
+          <button class="btn-secondary" onclick="window.print()">🖨️ Imprimir / Guardar Dictamen en PDF</button>
+          <button class="btn-primary" onclick="location.reload()">↺ Iniciar Nuevo Ejercicio Decenal</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="app-footer">
+    Universidad Autónoma Gabriel René Moreno · Carrera de Ciencias de la Educación · Taller de Educación Ambiental · Proyecto EcoMetrópolis Santa Cruz
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="js/data.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>
