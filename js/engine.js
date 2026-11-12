@@ -3,6 +3,17 @@
  * Manejo de estado, ecuaciones termodinámicas, bucles de retroalimentación y cálculo anual.
  */
 
+if (typeof require !== "undefined") {
+  if (typeof CONFIG_INICIAL === "undefined") {
+    const data = require("./data.js");
+    globalThis.CONFIG_INICIAL = data.CONFIG_INICIAL;
+    globalThis.MEDIDAS_POLITICA = data.MEDIDAS_POLITICA;
+    globalThis.EVENTOS_HISTORICOS = data.EVENTOS_HISTORICOS;
+    globalThis.TEORIAS_ACADEMICAS = data.TEORIAS_ACADEMICAS;
+    globalThis.resolverEventoDinamico = data.resolverEventoDinamico;
+  }
+}
+
 class MotorSimulacion {
   constructor() {
     this.reiniciar();
@@ -70,11 +81,18 @@ class MotorSimulacion {
     }
   }
 
+  obtenerEventoActual() {
+    if (typeof resolverEventoDinamico === "function") {
+      return resolverEventoDinamico(this.anioActual, this.estado, this.medidasSeleccionadas);
+    }
+    return EVENTOS_HISTORICOS[this.anioActual] || null;
+  }
+
   avanzarAnio() {
     if (this.juegoTerminado) return null;
 
     const anioProcesado = this.anioActual;
-    const eventoActual = EVENTOS_HISTORICOS[anioProcesado] || null;
+    const eventoActual = this.obtenerEventoActual();
     let alertasDelPeriodo = [];
 
     // 1. Aplicación de medidas seleccionadas
@@ -130,6 +148,28 @@ class MotorSimulacion {
     if (this.estado.descontentoSocial > 70) {
       this.estado.indicePIB -= 4;
       alertasDelPeriodo.push("Tensión social elevada: Paros ciudadanos y huelgas reducen la actividad económica.");
+    }
+
+    // 4.1. Puntos de Inflexión No Lineales (Tipping Points - Rockström et al., 2009)
+    // a) Sabanización del Bosque Seco Chiquitano (Bt < 60%)
+    if (this.estado.coberturaBosque < 60) {
+      this.estado.coberturaBosque -= 1.0; // Desgaste inercial acelerado a -1.8%
+      this.estado.calidadAirePM25 += 3.0; // Aumento basal de sequedad y polvo
+      alertasDelPeriodo.push("⚠️ PUNTO DE INFLEXIÓN: Sabanización del Bosque Chiquitano. Pérdida del régimen de lluvias y aceleración de la degradación.");
+    }
+
+    // b) Compactación y daño estructural al acuífero Urubó/Piraí (Wt < 40%)
+    if (this.estado.recargaAcuifero < 40) {
+      this.estado.recargaAcuifero -= 1.0; // Pérdida de porosidad y sellado profundo (-2.2%)
+      this.estado.indicePIB -= 3.0; // Contracción de capacidad agroindustrial
+      alertasDelPeriodo.push("⚠️ PUNTO DE INFLEXIÓN: Colapso de poros freáticos en el Urubó. La recarga hídrica sufre daño estructural irreversible.");
+    }
+
+    // c) Colapso agudo de la red hospitalaria metropolitana (Ht > 75%)
+    if (this.estado.saturacionSalud > 75) {
+      this.estado.descontentoSocial += 6.0; // Pánico e indignación ciudadana por triage
+      this.estado.indicePIB -= 4.0; // Ausentismo laboral masivo
+      alertasDelPeriodo.push("⚠️ PUNTO DE INFLEXIÓN: Colapso del sistema hospitalario metropolitano. Triage médico de emergencia.");
     }
 
     // 5. Normalización y acotamiento de límites físicos (0 a 100%, PM2.5 > 5)
@@ -240,3 +280,8 @@ class MotorSimulacion {
     };
   }
 }
+
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = { MotorSimulacion };
+}
+

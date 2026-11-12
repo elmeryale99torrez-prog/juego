@@ -30,3 +30,4 @@ yarn-error.log*
 *.tar.gz
 dist/
 build/
+coverage/

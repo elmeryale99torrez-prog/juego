@@ -68,6 +68,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalTeoriaCita = document.getElementById("modal-teoria-cita");
   const modalFinal = document.getElementById("modal-final");
 
+  // Elementos del Gráfico de Trayectoria Decenal
+  const canvasTrayectoria = document.getElementById("canvas-trayectoria");
+  const canvasTrayectoriaModal = document.getElementById("canvas-trayectoria-modal");
+  const elTooltipChart = document.getElementById("chart-tooltip");
+  const legendChips = document.querySelectorAll(".legend-chip");
+
+  const seriesVisibles = {
+    bosque: true,
+    acuifero: true,
+    aire: true,
+    circular: true,
+    tension: true
+  };
+
   // Inicialización de la vista
   function actualizarInterfazCompleta() {
     actualizarCabecera();
@@ -75,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
     actualizarMapaTerritorial();
     actualizarBandejaPoliticas();
     actualizarEventoPeriodo();
+    actualizarGraficoTrayectoria();
   }
 
   function actualizarCabecera() {
@@ -250,6 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           actualizarCabecera();
           actualizarBandejaPoliticas();
+          actualizarEventoPeriodo();
         }
       });
 
@@ -264,7 +280,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function actualizarEventoPeriodo() {
-    const evento = EVENTOS_HISTORICOS[motor.anioActual];
+    const evento = motor.obtenerEventoActual();
     if (evento) {
       elTituloEvento.textContent = `Año ${motor.anioActual}: ${evento.titulo}`;
       elDescEvento.textContent = evento.descripcion;
@@ -301,6 +317,12 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
 
     modalFinal.classList.add("active");
+
+    setTimeout(() => {
+      if (canvasTrayectoriaModal) {
+        dibujarGrafico(canvasTrayectoriaModal, motor.historial);
+      }
+    }, 60);
   }
 
   // --- FILTROS DE EJES ---
@@ -324,6 +346,12 @@ document.addEventListener("DOMContentLoaded", () => {
       resultado.alertas.forEach(alerta => {
         const item = document.createElement("div");
         item.className = "alert-item";
+        if (alerta.startsWith("⚠️")) {
+          item.style.borderColor = "#ef4444";
+          item.style.backgroundColor = "rgba(239, 68, 68, 0.18)";
+          item.style.color = "#fca5a5";
+          item.style.fontWeight = "600";
+        }
         item.textContent = alerta;
         elContenedorAlertas.appendChild(item);
       });
@@ -386,6 +414,236 @@ document.addEventListener("DOMContentLoaded", () => {
     zona.addEventListener("mouseleave", () => {
       elTooltipMapa.textContent = "Pasa el cursor sobre las zonas territoriales para explorar su función biofísica.";
     });
+  });
+
+  // --- MOTOR DE RENDERIZADO DEL GRÁFICO DE TRAYECTORIA DECENAL ---
+  const SERIES_CONFIG = {
+    bosque: { nombre: "Bosque", color: "#22c55e", unidad: "%", getVal: s => s.coberturaBosque },
+    acuifero: { nombre: "Acuífero", color: "#3b82f6", unidad: "%", getVal: s => s.recargaAcuifero },
+    aire: { nombre: "PM2.5", color: "#f97316", unidad: "µg/m³", getVal: s => s.calidadAirePM25 },
+    circular: { nombre: "Circular 9R", color: "#06b6d4", unidad: "%", getVal: s => s.economiaCircular },
+    tension: { nombre: "Tensión Social", color: "#eab308", unidad: "%", getVal: s => s.descontentoSocial }
+  };
+
+  function dibujarGrafico(canvas, historial, highlightIndex = null) {
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    const w = rect.width || 800;
+    const h = rect.height || 230;
+
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    ctx.scale(dpr, dpr);
+
+    const padL = 48;
+    const padR = 20;
+    const padT = 24;
+    const padB = 30;
+    const chartW = w - padL - padR;
+    const chartH = h - padT - padB;
+
+    ctx.clearRect(0, 0, w, h);
+
+    // Fondo sutil de cuadrícula
+    ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
+    ctx.fillRect(padL, padT, chartW, chartH);
+
+    // Líneas horizontales de guía (0, 25, 50, 75, 100%)
+    const niveles = [0, 25, 50, 75, 100];
+    ctx.lineWidth = 1;
+    ctx.font = "10px SFMono-Regular, Consolas, monospace";
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+
+    niveles.forEach(lvl => {
+      const y = padT + chartH * (1 - lvl / 100);
+
+      if (lvl === 50) {
+        // Umbral crítico de resiliencia ecológica (50%)
+        ctx.setLineDash([4, 4]);
+        ctx.strokeStyle = "rgba(239, 68, 68, 0.55)";
+        ctx.fillStyle = "rgba(239, 68, 68, 0.85)";
+        ctx.fillText("50% (Límite)", padL - 6, y);
+      } else {
+        ctx.setLineDash([]);
+        ctx.strokeStyle = "rgba(58, 92, 76, 0.25)";
+        ctx.fillStyle = "rgba(154, 180, 166, 0.65)";
+        ctx.fillText(`${lvl}%`, padL - 6, y);
+      }
+
+      ctx.beginPath();
+      ctx.moveTo(padL, y);
+      ctx.lineTo(padL + chartW, y);
+      ctx.stroke();
+    });
+    ctx.setLineDash([]);
+
+    // Eje X: Años 2026 - 2035
+    const totalAnios = 10;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.fillStyle = "rgba(154, 180, 166, 0.8)";
+
+    for (let i = 0; i < totalAnios; i++) {
+      const anio = 2026 + i;
+      const x = padL + (chartW / (totalAnios - 1)) * i;
+
+      // Línea vertical tenue
+      ctx.strokeStyle = "rgba(58, 92, 76, 0.18)";
+      ctx.beginPath();
+      ctx.moveTo(x, padT);
+      ctx.lineTo(x, padT + chartH);
+      ctx.stroke();
+
+      // Año en eje X
+      ctx.fillText(anio, x, padT + chartH + 8);
+    }
+
+    if (!historial || historial.length === 0) return;
+
+    // Resaltado de año activo bajo cursor
+    if (highlightIndex !== null && highlightIndex >= 0 && highlightIndex < historial.length) {
+      const hx = padL + (chartW / (totalAnios - 1)) * highlightIndex;
+      ctx.fillStyle = "rgba(16, 185, 129, 0.08)";
+      ctx.fillRect(hx - (chartW / (totalAnios - 1)) / 2, padT, chartW / (totalAnios - 1), chartH);
+      ctx.strokeStyle = "rgba(16, 185, 129, 0.6)";
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([2, 2]);
+      ctx.beginPath();
+      ctx.moveTo(hx, padT);
+      ctx.lineTo(hx, padT + chartH);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // Dibujar curvas de series activas
+    Object.keys(SERIES_CONFIG).forEach(clave => {
+      if (!seriesVisibles[clave]) return;
+      const conf = SERIES_CONFIG[clave];
+
+      ctx.strokeStyle = conf.color;
+      ctx.fillStyle = conf.color;
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+
+      const puntos = [];
+      historial.forEach((entry, idx) => {
+        const val = conf.getVal(entry.estado);
+        const yNorm = Math.max(0, Math.min(100, val));
+        const px = padL + (chartW / (totalAnios - 1)) * idx;
+        const py = padT + chartH * (1 - yNorm / 100);
+        puntos.push({ x: px, y: py, val });
+
+        if (idx === 0) {
+          ctx.moveTo(px, py);
+        } else {
+          ctx.lineTo(px, py);
+        }
+      });
+      ctx.stroke();
+
+      // Puntos en cada vértice anual
+      puntos.forEach((p, idx) => {
+        ctx.beginPath();
+        const esResaltado = highlightIndex === idx;
+        const radio = esResaltado ? 5.5 : 3.5;
+        ctx.arc(p.x, p.y, radio, 0, Math.PI * 2);
+        ctx.fillStyle = conf.color;
+        ctx.fill();
+        ctx.strokeStyle = "#08110d";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      });
+    });
+  }
+
+  function actualizarGraficoTrayectoria() {
+    dibujarGrafico(canvasTrayectoria, motor.historial);
+    if (canvasTrayectoriaModal) {
+      dibujarGrafico(canvasTrayectoriaModal, motor.historial);
+    }
+  }
+
+  // Interacción de cursor sobre el gráfico
+  if (canvasTrayectoria && elTooltipChart) {
+    const wrapper = canvasTrayectoria.parentElement;
+
+    wrapper.addEventListener("mousemove", (e) => {
+      const rect = canvasTrayectoria.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const padL = 48;
+      const padR = 20;
+      const chartW = rect.width - padL - padR;
+
+      if (mouseX < padL - 10 || mouseX > rect.width - padR + 10) {
+        elTooltipChart.style.display = "none";
+        dibujarGrafico(canvasTrayectoria, motor.historial, null);
+        return;
+      }
+
+      const relX = Math.max(0, Math.min(chartW, mouseX - padL));
+      const anioIndex = Math.round((relX / chartW) * 9);
+
+      if (anioIndex >= 0 && anioIndex < motor.historial.length) {
+        const item = motor.historial[anioIndex];
+        const px = padL + (chartW / 9) * anioIndex;
+
+        dibujarGrafico(canvasTrayectoria, motor.historial, anioIndex);
+
+        let html = `<div class="chart-tooltip-title">Año ${item.anio}</div>`;
+        Object.keys(SERIES_CONFIG).forEach(k => {
+          if (!seriesVisibles[k]) return;
+          const cfg = SERIES_CONFIG[k];
+          const val = cfg.getVal(item.estado);
+          html += `
+            <div class="chart-tooltip-row">
+              <span style="color:${cfg.color}; font-weight:600;">${cfg.nombre}:</span>
+              <span><strong>${val}</strong> ${cfg.unidad}</span>
+            </div>
+          `;
+        });
+
+        elTooltipChart.innerHTML = html;
+        elTooltipChart.style.display = "block";
+
+        const ttWidth = elTooltipChart.offsetWidth || 150;
+        let leftPos = px + 15;
+        if (leftPos + ttWidth > rect.width) {
+          leftPos = px - ttWidth - 15;
+        }
+        elTooltipChart.style.left = `${Math.max(10, leftPos)}px`;
+        elTooltipChart.style.top = "15px";
+      } else {
+        elTooltipChart.style.display = "none";
+        dibujarGrafico(canvasTrayectoria, motor.historial, null);
+      }
+    });
+
+    wrapper.addEventListener("mouseleave", () => {
+      elTooltipChart.style.display = "none";
+      dibujarGrafico(canvasTrayectoria, motor.historial, null);
+    });
+  }
+
+  // Toggles de visibilidad en la leyenda
+  legendChips.forEach(chip => {
+    chip.addEventListener("click", () => {
+      const serie = chip.getAttribute("data-serie");
+      if (seriesVisibles[serie] !== undefined) {
+        seriesVisibles[serie] = !seriesVisibles[serie];
+        chip.classList.toggle("active", seriesVisibles[serie]);
+        actualizarGraficoTrayectoria();
+      }
+    });
+  });
+
+  // Adaptación reactiva a cambios de tamaño de pantalla
+  window.addEventListener("resize", () => {
+    actualizarGraficoTrayectoria();
   });
 
   // Render inicial

@@ -24,7 +24,7 @@ Donde:
 
 El estado en el período $t+1$ resulta de la superposición del desgaste inercial metabólico, las políticas activadas $\mathcal{M}_t$ y el evento estocástico anual $E_t$:
 
-$$\vec{S}_{t+1} = \vec{S}_t + \vec{\Delta}_{\text{inercial}} + \sum_{m \in \mathcal{M}_t} \vec{\delta}_m + \vec{\epsilon}(E_t) + \vec{\phi}(\vec{S}_t)$$
+$$\vec{S}_{t+1} = \vec{S}_t + \vec{\Delta}_{\text{inercial}} + \sum_{m \in \mathcal{M}_t} \vec{\delta}_m + \vec{\epsilon}(E_t, \vec{S}_t, \mathcal{M}_t) + \vec{\phi}(\vec{S}_t) + \vec{\psi}_{\text{tipping}}(\vec{S}_t)$$
 
 #### 2.1. Vector de Inercia Metabólica Urbana ($\vec{\Delta}_{\text{inercial}}$)
 Expresa la degradación de baja entropía sin intervención correctiva:
@@ -43,6 +43,30 @@ $$\vec{\Delta}_{\text{inercial}} = \begin{pmatrix} -0.8 \\ +2.5 \\ -1.2 \\ 0.0 \
 
 3. **Retroalimentación por Parálisis Social ($D_t > 70\%$):**
    $$\Delta Y_t = -4.0$$
+
+#### 2.3. Operador de Puntos de Inflexión No Lineales (*Tipping Points*) $\vec{\psi}_{\text{tipping}}(\vec{S}_t)$
+
+Expresa transiciones de fase abruptas e irreversibles al quebrantarse la resiliencia del ecosistema (Rockström et al., 2009):
+
+1. **Sabanización del Bosque Seco Chiquitano ($B_t < 60\%$):**
+   Pérdida de recirculación de humedad y ruptura del dosel continuo:
+   $$\Delta B_t = -1.0 \quad (\text{degradación forestal total se agrava a } -1.8\%)$$
+   $$\Delta A_t = +3.0\ \mu\text{g}/\text{m}^3 \quad (\text{aumento basal de polvo y aridez})$$
+
+2. **Compactación y Daño Piezométrico del Acuífero ($W_t < 40\%$):**
+   Colapso estructural de poros en las colinas de infiltración del Urubó:
+   $$\Delta W_t = -1.0 \quad (\text{sellado freático total se eleva a } -2.2\%)$$
+   $$\Delta Y_t = -3.0 \quad (\text{contracción de capacidad agroindustrial})$$
+
+3. **Colapso de la Red Hospitalaria Metropolitana ($H_t > 75\%$):**
+   Saturación crítica de terapia intensiva y triage de emergencia:
+   $$\Delta D_t = +6.0\% \quad (\text{pánico e indignación ciudadana})$$
+   $$\Delta Y_t = -4.0 \quad (\text{ausentismo laboral masivo})$$
+
+#### 2.4. Resolución de Eventos Estocásticos Contextuales $\vec{\epsilon}(E_t, \vec{S}_t, \mathcal{M}_t)$
+El vector estocástico de coyuntura no es ciego al estado previo; evalúa la gobernanza territorial acumulada:
+* Si existen políticas de amortiguamiento activas (ej. moratoria de quemas ante incendios, o blindaje acuífero ante estiajes), el impacto del evento se atenúa hasta en un $65\%$.
+* Si existen desregulaciones o deterioro biofísico severo, el evento detona en catástrofe amplificada (ej. megaincendios o colapso del suministro de agua potable).
 
 ---
 

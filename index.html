@@ -224,6 +224,38 @@
         </div>
       </section>
 
+      <!-- VISOR DE TRAYECTORIA METABÓLICA DECENAL (SERIES TEMPORALES) -->
+      <section class="trajectory-section">
+        <div class="trajectory-header">
+          <div>
+            <h2 class="section-title">📈 Trayectoria Metabólica Decenal (2026–2035)</h2>
+            <span class="trajectory-subtitle">Evolución multivariable de límites biofísicos, umbrales de resiliencia y tensiones</span>
+          </div>
+          <div class="chart-legend" id="chart-legend">
+            <button class="legend-chip active" data-serie="bosque" style="--chip-color: #22c55e;">
+              <span class="legend-dot" style="background: #22c55e;"></span> 🌳 Bosque
+            </button>
+            <button class="legend-chip active" data-serie="acuifero" style="--chip-color: #3b82f6;">
+              <span class="legend-dot" style="background: #3b82f6;"></span> 💧 Acuífero
+            </button>
+            <button class="legend-chip active" data-serie="aire" style="--chip-color: #f97316;">
+              <span class="legend-dot" style="background: #f97316;"></span> 💨 PM2.5
+            </button>
+            <button class="legend-chip active" data-serie="circular" style="--chip-color: #06b6d4;">
+              <span class="legend-dot" style="background: #06b6d4;"></span> ♻️ 9R
+            </button>
+            <button class="legend-chip active" data-serie="tension" style="--chip-color: #eab308;">
+              <span class="legend-dot" style="background: #eab308;"></span> ⚡ Tensión
+            </button>
+          </div>
+        </div>
+
+        <div class="chart-canvas-wrapper">
+          <canvas id="canvas-trayectoria" width="820" height="230"></canvas>
+          <div id="chart-tooltip" class="chart-tooltip"></div>
+        </div>
+      </section>
+
       <!-- CARTERA DE MEDIDAS DE POLÍTICA PÚBLICA -->
       <section class="policies-section">
         <h2 class="section-title">🏛️ Asignación de Políticas Públicas e Inversión Territorial</h2>
@@ -319,6 +351,15 @@
         <p id="final-score-diag" style="font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.25rem;">
           Diagnóstico del resultado de la década...
         </p>
+
+        <div style="margin-bottom: 1.25rem;">
+          <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--accent-emerald); margin-bottom: 0.5rem;">
+            Trayectoria Decenal Consolidada (2026–2035):
+          </h4>
+          <div class="chart-canvas-wrapper final-chart">
+            <canvas id="canvas-trayectoria-modal" width="820" height="190"></canvas>
+          </div>
+        </div>
 
         <h4 style="font-size: 0.9rem; text-transform: uppercase; color: var(--accent-emerald); margin-bottom: 0.5rem;">
           Balance Biofísico y Socioeconómico de Cierre:

@@ -1,0 +1,27 @@
+{
+  "name": "ecometropolis-santacruz",
+  "version": "1.0.0",
+  "description": "EcoMetrópolis Santa Cruz - Laboratorio Interactivo de Simulación Territorial y Límites Biofísicos",
+  "main": "js/engine.js",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elmeryale99torrez-prog/juego.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/elmeryale99torrez-prog/juego/issues"
+  },
+  "homepage": "https://github.com/elmeryale99torrez-prog/juego#readme",
+  "devDependencies": {
+    "@vitest/coverage-v8": "^5.1.0",
+    "vitest": "^5.1.0"
+  }
+}

@@ -37,20 +37,25 @@ El modelo matemático concibe la ciudad como un **subsistema abierto** regido po
 ```text
 ecometropolis-santacruz/
 │
-├── .github/
-│   └── workflows/
-│       └── deploy.yml          # Flujo automático de despliegue en GitHub Pages
-│
 ├── css/
-│   └── styles.css              # Sistema de diseño, paleta ecológica y temas de alerta
+│   └── styles.css              # Sistema de diseño, paleta ecológica, temas de alerta y curvas
 │
 ├── js/
-│   ├── data.js                 # 12 medidas de política, 10 eventos anuales y postulados teóricos
-│   ├── engine.js               # Motor de cálculo biofísico, ecuaciones de balance y dictamen
-│   └── ui.js                   # Interfaz reactiva, mapa territorial SVG y control de eventos
+│   ├── data.js                 # 12 medidas de política, resolución dinámica de eventos y marco teórico
+│   ├── engine.js               # Motor de cálculo biofísico, Tipping Points, balance y dictamen
+│   └── ui.js                   # Interfaz reactiva, mapa SVG, gráfico Canvas de series temporales
 │
-├── index.html                  # Aplicación interactiva principal
-├── MODELO_MATEMATICO.md        # Especificación formal de ecuaciones y vectores de estado
+├── tests/                      # Suite de pruebas unitarias automatizadas (Vitest)
+│   ├── calidad-aire.test.js
+│   ├── cobertura-bosque.test.js
+│   ├── dictamen-sostenibilidad.test.js
+│   ├── presupuesto-dinamico.test.js
+│   ├── recarga-acuifero.test.js
+│   └── tipping-points.test.js
+│
+├── index.html                  # Aplicación interactiva principal con visor de trayectoria decenal
+├── MODELO_MATEMATICO.md        # Especificación formal de ecuaciones, Tipping Points y dinámica de sistemas
+├── package.json                # Configuración de pruebas unitarias y cobertura con Vitest
 ├── LICENSE                     # Licencia de código abierto MIT
 ├── .gitignore                  # Reglas de exclusión de archivos
 └── README.md                   # Documentación principal del proyecto
@@ -66,19 +71,27 @@ Cada intervención pública desplegada en el simulador incluye su respectivo res
 * **Arthur Cecil Pigou (1920):** *La Economía del Bienestar* (externalidades negativas e impuestos correctivos).
 * **Nicholas Georgescu-Roegen (1971):** *La Ley de la Entropía y el Proceso Económico* (subordinación a la termodinámica).
 * **Garrett Hardin (1968) y Elinor Ostrom (1990):** Dilemas de bienes comunes de libre acceso versus gobernanza comunitaria.
-* **Johan Rockström (2009):** Umbrales de resiliencia y fronteras planetarias.
+* **Johan Rockström (2009):** Umbrales de resiliencia, puntos de inflexión (*Tipping Points*) y fronteras planetarias.
 
 ---
 
 ### 5. Cómo Ejecutar Localmente
 
-No requiere Node.js, compiladores ni servidores externos. Funciona directamente en cualquier navegador moderno:
+No requiere Node.js, compiladores ni servidores externos para jugar. Funciona directamente en cualquier navegador moderno:
 
 1. Clona este repositorio o descarga el archivo `.zip`:
    ```bash
    git clone https://github.com/TU-USUARIO/ecometropolis-santacruz.git
    ```
 2. Entra a la carpeta del proyecto y abre el archivo `index.html` con doble clic.
+
+#### Ejecutar Suite de Pruebas Unitarias Automatizadas
+Si deseas auditar las ecuaciones biofísicas y los puntos de inflexión con Node.js:
+```bash
+npm install
+npm test              # Ejecución completa de las 46 pruebas unitarias
+npm run test:coverage # Reporte de cobertura de código
+```
 
 ---
 

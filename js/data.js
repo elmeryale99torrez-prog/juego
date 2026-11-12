@@ -305,3 +305,117 @@ const TEORIAS_ACADEMICAS = {
     postulado: "La economía debe orientarse hacia un estado estacionario donde el flujo de energía y materiales se mantenga dentro de las tasas naturales de regeneración y asimilación de la biosfera, priorizando el desarrollo cualitativo sobre la acumulación cuantitativa."
   }
 };
+
+/**
+ * Resuelve variantes contextuales de eventos anuales
+ * según el estado biofísico y las medidas activadas.
+ */
+function resolverEventoDinamico(anio, estado, medidasSeleccionadas) {
+  const base = EVENTOS_HISTORICOS[anio];
+  if (!base) return null;
+
+  const medidas = medidasSeleccionadas || new Set();
+
+  if (anio === 2026) {
+    if (medidas.has("moratoria_quemas") || medidas.has("subsidio_agroecologia")) {
+      return {
+        titulo: "Surazo seco: Alerta temprana y moratoria contienen quemas en el Norte Integrado",
+        descripcion: "Pese al viento sur, la inspección rigurosa y las brigadas comunitarias mitigan en 65% los focos de calor respecto a años anteriores.",
+        impactoForzado: { calidadAirePM25: +10, saturacionSalud: +6, coberturaBosque: -1 }
+      };
+    } else if (medidas.has("desregulacion_agropecuaria")) {
+      return {
+        titulo: "Surazo seco y Megaincendio descontrolado en el Norte Integrado",
+        descripcion: "La flexibilización de desmontes combinada con fuertes vientos desata un megaincendio que cubre de humo denso toda la mancha metropolitana.",
+        impactoForzado: { calidadAirePM25: +48, saturacionSalud: +28, coberturaBosque: -7 }
+      };
+    }
+  }
+
+  if (anio === 2027) {
+    if (medidas.has("blindaje_urubo") || medidas.has("restauracion_cordon_pirai")) {
+      return {
+        titulo: "Estiaje por El Niño amortiguado por la protección del Urubó y Piraí",
+        descripcion: "El cordón ecológico ribereño y la pausa urbanística en zonas de recarga amortiguan el impacto de la sequía sobre el caudal hídrico metropolitano.",
+        impactoForzado: { recargaAcuifero: -5, calidadAirePM25: +7, coberturaBosque: -1 }
+      };
+    } else if (estado && (estado.recargaAcuifero < 65 || medidas.has("permisividad_inmobiliaria"))) {
+      return {
+        titulo: "Catástrofe hídrica por estiaje extremo de El Niño",
+        descripcion: "El bajo nivel freático y el sellado de suelos provocan la desecación crítica de pozos vecinales y racionamiento forzado de agua potable.",
+        impactoForzado: { recargaAcuifero: -18, calidadAirePM25: +20, coberturaBosque: -4, descontentoSocial: +10 }
+      };
+    }
+  }
+
+  if (anio === 2028) {
+    if (estado && estado.recargaAcuifero >= 75 && estado.descontentoSocial < 40) {
+      return {
+        titulo: "Jornadas de concertación ciudadana y veeduría hídrica distrital",
+        descripcion: "La estabilidad en el abastecimiento de agua potable desactiva marchas vecinales; juntas de distrito respaldan el plan de recarga freática.",
+        impactoForzado: { descontentoSocial: -8, indicePIB: +2 }
+      };
+    } else if (estado && estado.recargaAcuifero < 55) {
+      return {
+        titulo: "Estallido social: Bloqueo metropolitano indefinido por colapso hídrico",
+        descripcion: "Vecinos de distritos periurbanos sin agua bloquean los cuatro accesos a la ciudad exigiendo renuncia de directores y declaratoria de desastre.",
+        impactoForzado: { descontentoSocial: +28, indicePIB: -8 }
+      };
+    }
+  }
+
+  if (anio === 2029) {
+    if (medidas.has("red_brt_electrico") || medidas.has("impuesto_pigouviano_emisiones")) {
+      return {
+        titulo: "Ola de calor con inversión térmica atenuada por transporte limpio",
+        descripcion: "A pesar de las altas temperaturas, la reducción de gases vehiculares amortigua los picos tóxicos a ras de suelo.",
+        impactoForzado: { calidadAirePM25: +10, saturacionSalud: +8, descontentoSocial: +3 }
+      };
+    } else if (estado && estado.calidadAirePM25 > 50) {
+      return {
+        titulo: "Emergencia atmosférica por ola de calor e inversión térmica severa",
+        descripcion: "La masa de contaminantes vehiculares e industriales queda atrapada a baja altura, triplicando las atenciones de urgencias pediátricas.",
+        impactoForzado: { calidadAirePM25: +32, saturacionSalud: +28, descontentoSocial: +12 }
+      };
+    }
+  }
+
+  if (anio === 2031) {
+    if (medidas.has("planta_biogas_compostaje") || medidas.has("inclusion_recicladores")) {
+      return {
+        titulo: "Contención temprana de lixiviados gracias a la segregación 9R",
+        descripcion: "La reducción de materia orgánica húmeda en celdas de vertedero evita filtraciones masivas a las napas freáticas profundas.",
+        impactoForzado: { recargaAcuifero: -2, saturacionSalud: +4, descontentoSocial: +4 }
+      };
+    }
+  }
+
+  if (anio === 2034) {
+    if (estado && estado.coberturaBosque >= 75) {
+      return {
+        titulo: "Fondo Verde Mundial premia con máxima subvención la preservación Chiquitana",
+        descripcion: "Organismos internacionales reconocen la eficacia en frenar chaqueos otorgando financiamiento récord no reembolsable.",
+        impactoForzado: { presupuestoBonus: +45, descontentoSocial: -15 }
+      };
+    } else if (estado && estado.coberturaBosque < 55) {
+      return {
+        titulo: "Sanción y exclusión de fondos verdes por deforestación récord",
+        descripcion: "La cooperación internacional retira su apoyo financiero ante la destrucción sostenida de áreas protegidas de la Chiquitania.",
+        impactoForzado: { presupuestoBonus: 0, descontentoSocial: +10 }
+      };
+    }
+  }
+
+  return base;
+}
+
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = {
+    CONFIG_INICIAL,
+    MEDIDAS_POLITICA,
+    EVENTOS_HISTORICOS,
+    TEORIAS_ACADEMICAS,
+    resolverEventoDinamico
+  };
+}
+
